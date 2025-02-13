@@ -1,7 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  base: "/celebration-app/",  // Wichtig für GitHub Pages!
+  build: {
+    outDir: "docs", // Hier ändern wir den Build-Ordner auf docs/
+  }
+});

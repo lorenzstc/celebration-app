@@ -3,12 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+"homepage": "https://lorenzstc.github.io/celebration-app",
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "deploy": "npm run build && git add . && git commit -m \"Deploy to GitHub Pages\" && git push origin main"
+},
   "dependencies": {
     "canvas-confetti": "^1.9.3",
     "fireworks-js": "^2.10.8",
