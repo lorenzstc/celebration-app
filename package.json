@@ -1,9 +1,9 @@
 {
-  "name": "celebration-app",
+  "name": "celebrationapp",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"homepage": "https://lorenzstc.github.io/celebration-app",
+"homepage": "https://lorenzstc.github.io/celebrationapp",
 "scripts": {
   "dev": "vite",
   "build": "vite build",
