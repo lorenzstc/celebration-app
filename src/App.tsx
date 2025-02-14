@@ -110,7 +110,7 @@ const CelebrationApp = () => {
       pdf.setFontSize(20);
 
       // Y-Koordinate anpassen, damit der Name über dem Bild platziert wird
-      pdf.text(`${enteredName}`, 105, 65, { align: "center" });
+      pdf.text(`${enteredName}`, 105, 70, { align: "center" });
       
 
       pdf.save("zertifikat_einreichung.pdf");
