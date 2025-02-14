@@ -142,10 +142,10 @@ const CelebrationApp = () => {
               <br />
               <p>Für die erfolgreiche Einreichung der Dissertation 📜🎓</p>
               <img src={capturedImage} alt="Aufgenommenes Foto" className="certificate-image framed shadow" />
+              <div className="certificate-seal pulse">🏅 Ehrenmedaille für Exzellenz 🏅</div>
               <p className="signature">Verliehen vom <strong>Lehrstuhl für Eskalation (LfE)! 🚀</strong></p>
               <p className="signature2">Ihr Einreichungskomitee Kippo und Lorenzo wünscht alles Gute!</p>
-              <div className="certificate-seal pulse">🏅 Ehrenmedaille für Exzellenz 🏅</div>
-            </div>
+              </div>
           </div>
           <button className="btn-download fancy-button" onClick={generatePDF}>📄 Zertifikat herunterladen</button>
         </div>
