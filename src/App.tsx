@@ -8,8 +8,9 @@ import "./App.css";
 
 const CelebrationApp = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(10);
   const [showWebcam, setShowWebcam] = useState(true);
+  const [name, setName] = useState("");
   const webcamRef = useRef<Webcam | null>(null);
   const certificateRef = useRef(null);
   const fireworksRef = useRef<Fireworks | null>(null);
@@ -26,12 +27,12 @@ const CelebrationApp = () => {
       if (!fireworksRef.current && fireworksContainerRef.current) {
         fireworksRef.current = new Fireworks(fireworksContainerRef.current, {
           autoresize: true,
-          opacity: 0.7,
-          acceleration: 1.02,
-          particles: 80,
-          explosion: 5,
-          intensity: 30,
-          friction: 0.98,
+          opacity: 0.9,
+          acceleration: 1.05,
+          particles: 120,
+          explosion: 7,
+          intensity: 40,
+          friction: 0.97,
           gravity: 2,
           sound: {
             enabled: true,
@@ -42,18 +43,14 @@ const CelebrationApp = () => {
             }
           },
         });
-  
-        // Warten, bis DOM vollständig ist, dann starten
         setTimeout(() => {
           fireworksRef.current?.start();
         }, 500);
       }
     };
-  
-    // Starte Fireworks, wenn die Seite bereit ist
+
     window.addEventListener("load", initializeFireworks);
 
-    // Countdown starten
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -96,6 +93,8 @@ const CelebrationApp = () => {
   };
 
   const generatePDF = () => {
+    const enteredName = prompt('Bitte gib deinen Namen ein:');
+    if (!enteredName) return; // Falls kein Name eingegeben wird, brich ab.
     if (!certificateRef.current) return;
 
     html2canvas(certificateRef.current, { scale: 2 }).then((canvas) => {
@@ -106,6 +105,10 @@ const CelebrationApp = () => {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+      pdf.setFontSize(16);
+      pdf.text(name, 105, 140, { align: "center" });
+            pdf.setFontSize(20);
+      pdf.text(enteredName, 105, 130, { align: 'center' });
       pdf.save("zertifikat_einreichung.pdf");
     });
   };
@@ -113,27 +116,37 @@ const CelebrationApp = () => {
   return (
     <div className="celebration-container">
       <div ref={fireworksContainerRef} className="fireworks-container"></div>
-      <h1 className="celebration-title">🎉 Herzlichen Glückwunsch zur Einreichung! 🎉</h1>
-      {countdown > 0 && <h2 className="countdown-text">📸 Fotoaufnahme in {countdown} Sekunden...</h2>}
+      <h1 className="celebration-title">
+        🎉 <span className="highlight">Glückwunsch!</span> 🎉
+      </h1>
+      {countdown > 0 && <h2 className="countdown-text">📸 Foto in {countdown} Sekunden...</h2>}
 
       {showWebcam && (
-        <div className="webcam-container">
-          <Webcam ref={webcamRef} screenshotFormat="image/png" className="webcam" />
+        <div className="webcam-container animated-bounce">
+          <Webcam ref={webcamRef} screenshotFormat="image/png" className="webcam bordered" />
         </div>
       )}
 
       {capturedImage && (
         <div className="certificate-container">
-          <div ref={certificateRef} className="certificate">
-            <h2>🏆 Zertifikat der Einreichung 🏆</h2>
-            <p>Verliehen an:</p>
-            <h3 className="celebration-name">Hervorragende/r Forscher/in</h3>
-            <p>Für die erfolgreiche Einreichung der Dissertation 📜</p>
-            <p>Das ist Klaus enough am Dr-Titel</p>
-            <img src={capturedImage} alt="Aufgenommenes Foto" className="certificate-image" />
-            <p className="signature">Unterschrift: <strong>Lehrstuhl für Eskalation (LfE)! 🎉</strong></p>
+          <div ref={certificateRef} className="certificate modern-certificate">
+            <div className="certificate-border stylish">
+              <h2>🏆 Ehrenvolles Zertifikat 🏆</h2>
+              <p>Verliehen an:</p>
+              <input
+                type="text"
+                className="name-input"
+                placeholder="Dein Name hier..."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <p>Für die legendäre Einreichung der Dissertation 📜</p>
+              <img src={capturedImage} alt="Aufgenommenes Foto" className="certificate-image framed shadow" />
+              <p className="signature">Von höchster Instanz: <strong>Lehrstuhl für Eskalation (LfE)! 🚀</strong></p>
+              <div className="certificate-seal pulse">🏅 Ehrenmedaille für Exzellenz 🏅</div>
+            </div>
           </div>
-          <button className="btn-download" onClick={generatePDF}>📄 Zertifikat herunterladen</button>
+          <button className="btn-download fancy-button" onClick={generatePDF}>📄 Zertifikat herunterladen</button>
         </div>
       )}
     </div>
