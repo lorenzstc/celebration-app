@@ -70,7 +70,7 @@ const CelebrationApp = () => {
   const capturePhoto = () => {
     if (webcamRef.current) {
       setTimeout(() => {
-        const imageSrc = webcamRef.current?.getScreenshot();
+        const imageSrc = webcamRef.current?.getScreenshot({ width: 1920, height: 1080 });
         if (imageSrc) {
           setCapturedImage(imageSrc);
           setTimeout(stopWebcamStream, 500);
@@ -128,7 +128,18 @@ const CelebrationApp = () => {
 
       {showWebcam && (
         <div className="webcam-container animated-bounce">
-          <Webcam ref={webcamRef} screenshotFormat="image/png" className="webcam bordered" />
+          <Webcam
+            ref={webcamRef}
+            screenshotFormat="image/png"
+            className="webcam bordered"
+            width={1280} // Breitere Auflösung
+            height={720} // Höhere Auflösung
+            videoConstraints={{
+              width: 1920, // Full HD-Qualität
+              height: 1080,
+              facingMode: "user"
+            }}
+          />
         </div>
       )}
 
