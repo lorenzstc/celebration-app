@@ -14,6 +14,13 @@ const CelebrationApp = () => {
   const certificateRef = useRef(null);
   const fireworksRef = useRef<Fireworks | null>(null);
   const fireworksContainerRef = useRef<HTMLDivElement | null>(null);
+  const videoConstraints = {
+    width: window.innerWidth > 1920 ? 3840 : window.innerWidth > 1280 ? 1920 : 1280, // Automatische Anpassung der Auflösung
+    height: window.innerHeight > 1080 ? 2160 : window.innerHeight > 720 ? 1080 : 720,
+    facingMode: "user", // Standard-Webcam nutzen
+    frameRate: { ideal: 30, max: 60 } // Falls möglich, mit bis zu 60 FPS aufnehmen
+  };
+  
 
   const fireworkSounds = [
     "https://fireworks.js.org/sounds/explosion0.mp3",
@@ -70,7 +77,7 @@ const CelebrationApp = () => {
   const capturePhoto = () => {
     if (webcamRef.current) {
       setTimeout(() => {
-        const imageSrc = webcamRef.current?.getScreenshot({ width: 1920, height: 1080 });
+        const imageSrc = webcamRef.current?.getScreenshot({ width: 3840, height: 2160 });
         if (imageSrc) {
           setCapturedImage(imageSrc);
           setTimeout(stopWebcamStream, 500);
@@ -97,14 +104,14 @@ const CelebrationApp = () => {
 
     if (!certificateRef.current) return;
 
-    html2canvas(certificateRef.current, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
+    html2canvas(certificateRef.current, { scale: 3 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png", 1.0); // Maximale Qualität setzen
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = 210;
       const imgWidth = pdfWidth - 20;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight, "", "FAST"); // Schnellere Performance
       
       // Schriftgröße setzen
       pdf.setFontSize(20);
@@ -132,13 +139,7 @@ const CelebrationApp = () => {
             ref={webcamRef}
             screenshotFormat="image/png"
             className="webcam bordered"
-            width={1280} // Breitere Auflösung
-            height={720} // Höhere Auflösung
-            videoConstraints={{
-              width: 1920, // Full HD-Qualität
-              height: 1080,
-              facingMode: "user"
-            }}
+            videoConstraints={videoConstraints}
           />
         </div>
       )}
